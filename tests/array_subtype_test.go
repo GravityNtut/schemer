@@ -1,6 +1,8 @@
 package tests
 
 import (
+	"regexp"
+	"strings"
 	"testing"
 
 	"github.com/BrobridgeOrg/schemer"
@@ -34,9 +36,79 @@ var arraySchema2 = `{
     }
 }`
 
+var arraySchema3 = `{
+    "array_null":{
+        "type":"array",
+        "subtype":""
+    }
+}`
+
+var arraySchema4 = `{
+    "array_space":{
+        "type":"array",
+        "subtype":" "
+    }
+}`
+
+var arraySchema5 = `{
+    "array_abc":{
+        "type":"array",
+        "subtype":"abc"
+    }
+}`
+
+var arraySchema6 = `{ 
+    "array_chinese":{
+        "type":"array",
+        "subtype":"中文"
+    }
+}`
+
+var arraySchema7 = `{
+    "array_special":{
+        "type":"array",
+        "subtype":"!@#$%^&*()_+{}:<>?~-=[]\\;',./" 
+    }
+}`
+var arraySchema8 = `{
+    "array_maxLen":{
+        "type":"array",
+        "subtype":"[max_len_str()]"
+    }
+}`
+
 func Test_WorngSubtypeWithString(t *testing.T) {
 
 	testSourceSchema := schemer.NewSchema()
-	err := schemer.UnmarshalJSON([]byte(arraySchema2), testSourceSchema)
+	schema := ReplaceMaxLenStr(arraySchema2)
+	err := schemer.UnmarshalJSON([]byte(schema), testSourceSchema)
 	assert.Error(t, err)
+
+	err = schemer.UnmarshalJSON([]byte(arraySchema3), testSourceSchema)
+	assert.Error(t, err)
+
+	err = schemer.UnmarshalJSON([]byte(arraySchema4), testSourceSchema)
+	assert.Error(t, err)
+
+	err = schemer.UnmarshalJSON([]byte(arraySchema5), testSourceSchema)
+	assert.Error(t, err)
+
+	err = schemer.UnmarshalJSON([]byte(arraySchema6), testSourceSchema)
+	assert.Error(t, err)
+
+	err = schemer.UnmarshalJSON([]byte(arraySchema7), testSourceSchema)
+	assert.Error(t, err)
+
+	schema = ReplaceMaxLenStr(arraySchema8)
+	err = schemer.UnmarshalJSON([]byte(schema), testSourceSchema)
+	assert.Error(t, err)
+}
+
+func ReplaceMaxLenStr(s string) string {
+	reMaxLenStr := regexp.MustCompile(`\[max_len_str\(\)\]`)
+	if reMaxLenStr.MatchString(s) {
+		longString := strings.Repeat("a", 32768)
+		s = reMaxLenStr.ReplaceAllString(s, longString)
+	}
+	return s
 }
