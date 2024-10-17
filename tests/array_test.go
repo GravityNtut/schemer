@@ -241,7 +241,7 @@ func Test_TimeArray(t *testing.T) {
 	}
 
 	var rawData map[string]interface{}
-	json.Unmarshal([]byte(`{"array_time":["2024-08-06T15:02:00Z", "2024-08-06T15:02:00Z", "2024-08-06T15:02:00Z"], "array_any":["2024-08-06T15:02:00Z", "2024-08-06T15:02:00Z", "2024-08-06T15:02:00Z"]}`), &rawData)
+	json.Unmarshal([]byte(`{"array_time":["2024-08-06T15:02:00Z", "2024-08-06T15:03:00Z", "2024-08-06T15:04:00Z"], "array_any":["2024-08-06T15:02:00Z", "2024-08-06T15:02:00Z", "2024-08-06T15:02:00Z"]}`), &rawData)
 	source := testSourceSchema.Normalize(rawData)
 
 	// Transforming
@@ -255,8 +255,12 @@ func Test_TimeArray(t *testing.T) {
 	}
 
 	result := returnedValue[0]
-	assert.ElementsMatch(t, []time.Time{time.Unix(1722956520, 0).UTC(), time.Unix(1722956520, 0).UTC(), time.Unix(1722956520, 0).UTC()}, result["array_time"])
-	// assert.ElementsMatch(t, []string{"2024-08-06T15:02:00Z", "2024-08-06T15:02:00Z", "2024-08-06T15:02:00Z"}, result["array_any"])
+	resultTimeArray := []time.Time{}
+	for _, t := range result["array_time"].([]interface{}) {
+		resultTimeArray = append(resultTimeArray, t.(time.Time).UTC())
+	}
+	assert.ElementsMatch(t, []time.Time{time.Date(2024, 8, 6, 15, 2, 0, 0, time.UTC), time.Date(2024, 8, 6, 15, 3, 0, 0, time.UTC), time.Date(2024, 8, 6, 15, 4, 0, 0, time.UTC)}, resultTimeArray)
+	assert.ElementsMatch(t, []string{"2024-08-06T15:02:00Z", "2024-08-06T15:02:00Z", "2024-08-06T15:02:00Z"}, result["array_any"])
 }
 
 func Test_LongStringArray(t *testing.T) {
@@ -326,7 +330,14 @@ func Test_MassiveElementsArray(t *testing.T) {
 		}
 		testJSON += fmt.Sprintf("%d", i)
 	}
-	testJSON += "]}"
+	testJSON += `],"array_any":[`
+	for i := 1; i <= 32768; i++ {
+		if i > 1 {
+			testJSON += ", "
+		}
+		testJSON += fmt.Sprintf("%d", i)
+	}
+	testJSON += `]}`
 
 	var rawData map[string]interface{}
 	json.Unmarshal([]byte(testJSON), &rawData)
@@ -343,11 +354,17 @@ func Test_MassiveElementsArray(t *testing.T) {
 	}
 
 	result := returnedValue[0]
-	expected := make([]int64, 32768)
+	expectedInt := make([]int64, 32768)
 	for i := 1; i <= 32768; i++ {
-		expected[i-1] = int64(i)
+		expectedInt[i-1] = int64(i)
 	}
-	assert.ElementsMatch(t, expected, result["array_int"])
+	expectedAny := make([]float64, 32768)
+	for i := 1; i <= 32768; i++ {
+		expectedAny[i-1] = float64(i)
+	}
+
+	assert.ElementsMatch(t, expectedInt, result["array_int"])
+	assert.ElementsMatch(t, expectedAny, result["array_any"])
 }
 
 func Test_SameElementArray(t *testing.T) {

@@ -33,6 +33,9 @@ var arraySchema2 = `{
     "array_maxLen":{
         "type":"array",
         "subtype":"[max_len_str()]"
+    },
+    "array_Ignore":{
+        "type":"array"
     }
 }`
 
@@ -77,6 +80,12 @@ var arraySchema8 = `{
     }
 }`
 
+var arraySchema9 = `{
+    "array_Ignore":{
+        "type":"array"
+    }
+}`
+
 func Test_WorngSubtypeWithString(t *testing.T) {
 
 	testSourceSchema := schemer.NewSchema()
@@ -101,6 +110,9 @@ func Test_WorngSubtypeWithString(t *testing.T) {
 
 	schema = ReplaceMaxLenStr(arraySchema8)
 	err = schemer.UnmarshalJSON([]byte(schema), testSourceSchema)
+	assert.Error(t, err)
+
+	err = schemer.UnmarshalJSON([]byte(arraySchema9), testSourceSchema)
 	assert.Error(t, err)
 }
 
