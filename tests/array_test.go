@@ -68,7 +68,7 @@ func SetupTransformer(t *testing.T, schema string) (*schemer.Transformer, *schem
 	return transformer, testSourceSchema, nil
 }
 
-func Test_EmptyArray(t *testing.T) {
+func TestEmptyArray(t *testing.T) {
 
 	transformer, testSourceSchema, err := SetupTransformer(t, arraySchema1)
 	if err != nil {
@@ -99,7 +99,7 @@ func Test_EmptyArray(t *testing.T) {
 	assert.Equal(t, []interface{}{}, result["array_any"])
 }
 
-func Test_StringArray(t *testing.T) {
+func TestStringArray(t *testing.T) {
 
 	transformer, testSourceSchema, err := SetupTransformer(t, arraySchema1)
 	if err != nil {
@@ -127,7 +127,7 @@ func Test_StringArray(t *testing.T) {
 	assert.ElementsMatch(t, []string{"a", "b", "c"}, result["array_any"])
 }
 
-func Test_IntArray(t *testing.T) {
+func TestIntArray(t *testing.T) {
 
 	transformer, testSourceSchema, err := SetupTransformer(t, arraySchema1)
 	if err != nil {
@@ -156,7 +156,7 @@ func Test_IntArray(t *testing.T) {
 	assert.ElementsMatch(t, []float64{1, 2, 3}, result["array_any"])
 }
 
-func Test_BinaryArray(t *testing.T) {
+func TestBinaryArray(t *testing.T) {
 
 	transformer, testSourceSchema, err := SetupTransformer(t, arraySchema1)
 	if err != nil {
@@ -181,7 +181,7 @@ func Test_BinaryArray(t *testing.T) {
 	assert.ElementsMatch(t, [][]byte{{0x30, 0x30}, {0x30, 0x31}, {0x31, 0x30}, {0x31, 0x31}}, result["array_binary"])
 }
 
-func Test_FloatArray(t *testing.T) {
+func TestFloatArray(t *testing.T) {
 
 	transformer, testSourceSchema, err := SetupTransformer(t, arraySchema1)
 	if err != nil {
@@ -207,7 +207,7 @@ func Test_FloatArray(t *testing.T) {
 	assert.ElementsMatch(t, []float64{1.1, 2.2, 3.3}, result["array_any"])
 }
 
-func Test_BoolArray(t *testing.T) {
+func TestBoolArray(t *testing.T) {
 
 	transformer, testSourceSchema, err := SetupTransformer(t, arraySchema1)
 	if err != nil {
@@ -233,7 +233,7 @@ func Test_BoolArray(t *testing.T) {
 	assert.ElementsMatch(t, []bool{true, false}, result["array_any"])
 }
 
-func Test_TimeArray(t *testing.T) {
+func TestTimeArray(t *testing.T) {
 
 	transformer, testSourceSchema, err := SetupTransformer(t, arraySchema1)
 	if err != nil {
@@ -263,7 +263,7 @@ func Test_TimeArray(t *testing.T) {
 	assert.ElementsMatch(t, []string{"2024-08-06T15:02:00Z", "2024-08-06T15:02:00Z", "2024-08-06T15:02:00Z"}, result["array_any"])
 }
 
-func Test_LongStringArray(t *testing.T) {
+func TestLongStringArray(t *testing.T) {
 
 	transformer, testSourceSchema, err := SetupTransformer(t, arraySchema1)
 	if err != nil {
@@ -291,7 +291,7 @@ func Test_LongStringArray(t *testing.T) {
 	assert.ElementsMatch(t, []string{longString, longString, longString}, result["array_any"])
 }
 
-func Test_SingleElementArray(t *testing.T) {
+func TestSingleElementArray(t *testing.T) {
 	transformer, testSourceSchema, err := SetupTransformer(t, arraySchema1)
 	if err != nil {
 		return
@@ -317,7 +317,7 @@ func Test_SingleElementArray(t *testing.T) {
 	assert.ElementsMatch(t, []float64{1}, result["array_any"])
 }
 
-func Test_MassiveElementsArray(t *testing.T) {
+func TestMassiveElementsArray(t *testing.T) {
 	transformer, testSourceSchema, err := SetupTransformer(t, arraySchema1)
 	if err != nil {
 		return
@@ -367,7 +367,7 @@ func Test_MassiveElementsArray(t *testing.T) {
 	assert.ElementsMatch(t, expectedAny, result["array_any"])
 }
 
-func Test_SameElementArray(t *testing.T) {
+func TestSameElementArray(t *testing.T) {
 	transformer, testSourceSchema, err := SetupTransformer(t, arraySchema1)
 	if err != nil {
 		return
@@ -393,7 +393,7 @@ func Test_SameElementArray(t *testing.T) {
 	assert.ElementsMatch(t, []float64{1, 1, 1}, result["array_any"])
 }
 
-func Test_StringArrayWithInvalidSubtypes(t *testing.T) {
+func TestStringArrayWithInvalidSubtypes(t *testing.T) {
 	transformer, testSourceSchema, err := SetupTransformer(t, arraySchema1)
 	if err != nil {
 		return
@@ -423,7 +423,7 @@ func Test_StringArrayWithInvalidSubtypes(t *testing.T) {
 
 }
 
-func Test_IntArrayWithInvalidSubypes(t *testing.T) {
+func TestIntArrayWithInvalidSubypes(t *testing.T) {
 	transformer, testSourceSchema, err := SetupTransformer(t, arraySchema1)
 	if err != nil {
 		return
@@ -450,7 +450,7 @@ func Test_IntArrayWithInvalidSubypes(t *testing.T) {
 	assert.ElementsMatch(t, []time.Time{time.Unix(1, 0), time.Unix(2, 0), time.Unix(3, 0)}, result["array_time"])
 }
 
-func Test_BinaryArrayWithInvalidSubtypes(t *testing.T) {
+func TestBinaryArrayWithInvalidSubtypes(t *testing.T) {
 	transformer, testSourceSchema, err := SetupTransformer(t, arraySchema1)
 	if err != nil {
 		return
@@ -479,7 +479,7 @@ func Test_BinaryArrayWithInvalidSubtypes(t *testing.T) {
 	assert.ElementsMatch(t, []time.Time{tt, tt, tt, tt}, result["array_time"])
 }
 
-func Test_FloatArrayWithInvalidSubtypes(t *testing.T) {
+func TestFloatArrayWithInvalidSubtypes(t *testing.T) {
 	transformer, testSourceSchema, err := SetupTransformer(t, arraySchema1)
 	if err != nil {
 		return
@@ -508,7 +508,7 @@ func Test_FloatArrayWithInvalidSubtypes(t *testing.T) {
 	assert.ElementsMatch(t, []time.Time{time.Unix(1, 0), time.Unix(2, 0), time.Unix(3, 0)}, result["array_time"])
 }
 
-func Test_MixTypesArray(t *testing.T) {
+func TestMixTypesArray(t *testing.T) {
 	transformer, testSourceSchema, err := SetupTransformer(t, arraySchema1)
 	if err != nil {
 		return
@@ -540,7 +540,7 @@ func Test_MixTypesArray(t *testing.T) {
 	assert.ElementsMatch(t, []interface{}{float64(1), "a", 5.6, true}, result["array_any"])
 }
 
-func Test_NonArray_Null(t *testing.T) {
+func TestNonArray_Null(t *testing.T) {
 	transformer, testSourceSchema, err := SetupTransformer(t, arraySchema1)
 	if err != nil {
 		return
@@ -571,7 +571,7 @@ func Test_NonArray_Null(t *testing.T) {
 	assert.ElementsMatch(t, nil, result["array_any"])
 }
 
-func Test_NonArray_Space(t *testing.T) {
+func TestNonArray_Space(t *testing.T) {
 	transformer, testSourceSchema, err := SetupTransformer(t, arraySchema1)
 	if err != nil {
 		return
@@ -602,7 +602,7 @@ func Test_NonArray_Space(t *testing.T) {
 	assert.ElementsMatch(t, nil, result["array_any"])
 }
 
-func Test_NonArray_String(t *testing.T) {
+func TestNonArray_String(t *testing.T) {
 	transformer, testSourceSchema, err := SetupTransformer(t, arraySchema1)
 	if err != nil {
 		return
@@ -633,7 +633,7 @@ func Test_NonArray_String(t *testing.T) {
 	assert.ElementsMatch(t, nil, result["array_any"])
 }
 
-func Test_NonArray_Int(t *testing.T) {
+func TestNonArray_Int(t *testing.T) {
 	transformer, testSourceSchema, err := SetupTransformer(t, arraySchema1)
 	if err != nil {
 		return

@@ -86,7 +86,7 @@ var arraySchema9 = `{
     }
 }`
 
-func Test_WorngSubtypeWithString(t *testing.T) {
+func TestWorngSubtypeWithString(t *testing.T) {
 
 	testSourceSchema := schemer.NewSchema()
 	schema := ReplaceMaxLenStr(arraySchema2)
