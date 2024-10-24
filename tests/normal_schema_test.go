@@ -250,11 +250,11 @@ func TestNormalSchemaErrorHandle(t *testing.T) {
 	NormalSchemaTransformTest(t, testSourceSchema, transformer, extensionOneInput6, extensionOneExpected6)
 
 	extensionOneInput7 := normalSchemaInput{`7`, `5`, `"abc"`, `9223372036854775808`, `-1`, `1.0000000000000001`, `5`, `""`}
-	extensionOneExpected7 := normalSchemaExpected{7, "5", []byte{0x61, 0x62, 0x63}, -9223372036854775808, 9223372036854775808, 1, true, ""}
+	extensionOneExpected7 := normalSchemaExpected{7, "5", []byte{0x61, 0x62, 0x63}, -9223372036854775808, 18446744073709551615, 1, true, ""}
 	NormalSchemaTransformTest(t, testSourceSchema, transformer, extensionOneInput7, extensionOneExpected7)
 
 	extensionOneInput8 := normalSchemaInput{`8`, `5`, `"中文"`, `-9223372036854775809`, `18446744073709551616`, `""`, `""`, `""`}
-	extensionOneExpected8 := normalSchemaExpected{8, "5", []byte{0xe4, 0xb8, 0xad, 0xe6, 0x96, 0x87}, -9223372036854775808, 9223372036854775808, 0, false, ""}
+	extensionOneExpected8 := normalSchemaExpected{8, "5", []byte{0xe4, 0xb8, 0xad, 0xe6, 0x96, 0x87}, 9223372036854775807, 0, 0, false, ""}
 	NormalSchemaTransformTest(t, testSourceSchema, transformer, extensionOneInput8, extensionOneExpected8)
 
 	extensionOneInput9 := normalSchemaInput{`9`, `5`, SPECIAL_CHAR, `1.23`, `1.23`, `" "`, `" "`, `""`}
